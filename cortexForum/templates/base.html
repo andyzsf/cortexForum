@@ -1,0 +1,98 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+  <html lang="zh-cn">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Library Management">
+      <meta name="author" content="hzcortex">
+        <title>{% block title %}{% endblock %}</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.min.css' %}">
+        <!-- 在这里还应该提供自己手动定制的 css 文件，来增强展示效果 -->
+         <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}">
+    </script>
+
+    </head>
+
+    <body>
+
+
+   <nav class="navbar navbar-default navbar-static-top">
+
+        <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+        <a class="navbar-brand" href="{% url 'homepage' %}" >cortexForum</a>
+        </div>
+
+        <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+         <div class="collapse navbar-collapse" id="navbar-collapse-homepage">
+      <ul class="nav navbar-nav">
+        <li><a href="#">话题</a></li> <!-- 这里应该指向主题，主页-->
+          <li><a href="#">成员</a></li> <!-- 这里应该指向成员-->
+          <li><a href="#">wiki</a></li> <!-- 这里应该指向 wiki -->
+
+
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+
+
+         <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="#">主页</a></li>
+            <li><a href="#">设置</a></li>
+
+            <li role="separator" class="divider"></li>
+            <li><a href="#">退出</a></li>
+
+         </ul>
+          </li>
+
+
+
+
+         </div>
+
+        </div>
+
+    </nav>
+
+    <!-- 头部已经完成，接下来就是看怎么划分剩下的模块了-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-1">
+            {% if user %}
+            {{ user.username }}
+            {% endif %}
+                {% block main_content %} {% endblock %}
+            </div>
+            <div class="col-md-3">
+                {% block sidebar %} {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 接下来就是尾部标志自己了，right reserver等，之后再看 -->
+
+    </body>
+</html>
