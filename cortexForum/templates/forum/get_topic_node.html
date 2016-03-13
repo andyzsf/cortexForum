@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block main_content %}
+
+    <div class="panel panel-warning">
+
+  <div class="panel-heading">关于 {{ slug }} 的话题</div>
+  <div class="panel-body">
+  </div>
+
+  <!-- List group -->
+  <ul class="list-group">
+       {% for topic in node_topic %}
+        <li class="list-group-item">
+        <span class="badge">{{ topic.reply_count }}</span>
+             <a href="forum/topic/{{ topic.id }}">{{ topic.title }}</a>
+        <br><br>
+              由 {{ topic.author.user.username }} 在 {{ topic.node.name }} 发表于 <strong>{{ topic.created_at }}</strong>
+
+        </li>
+        {% endfor %}
+  </ul>
+</div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

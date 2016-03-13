@@ -1,0 +1,86 @@
+{% load  staticfiles %}
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+
+    <title>jQuery Upvote</title>
+    <meta name="author" content="Janos Gyerik">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.upvote.css' %}">
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.upvote.js' %}"></script>
+
+
+
+	<!--
+	.hidden {
+	    display: none;
+	}
+    .examples {
+        overflow: auto;
+    }
+    .examples div.upvote {
+        float: left;
+    }
+    #footer {
+        height: 60px;
+        background-color: #f5f5f5;
+    }
+    .credit {
+        margin: 20px 0;
+    }
+	-->
+
+    <script type="text/javascript">
+        function gen(target, cssClass, params) {
+            var obj = $('#templates .upvote').clone();
+            obj.addClass(cssClass);
+            $(target).append(obj);
+            return obj.upvote(params);
+        }
+
+        $(function() {
+
+                function gen_unix(params) {
+                    gen('#unix', 'upvote-unix', params);
+                }
+
+
+                var functions = [gen_unix];
+                for (var i in functions) {
+                    var fun = functions[i];
+                    fun();
+                }
+        });
+    </script>
+</head>
+
+
+<body>
+
+        <div class="row">
+
+                <div class="examples" id="unix"></div>
+
+        </div>
+
+
+
+    <div id="templates" class="hidden">
+        <div class="upvote">
+            <a class="upvote" title="This is good stuff. Vote it up! (Click again to undo)"></a>
+            <span class="count" title="Total number of votes"></span>
+            <a class="downvote" title="This is not useful. Vote it down. (Click again to undo)"></a>
+            <a class="star" title="Mark as favorite. (Click again to undo)"></a>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+
+

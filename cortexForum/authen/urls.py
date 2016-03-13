@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^forget_password/$', views.user_forget_password, name='forgetPassword'),
     url(r'^set_password/$', views.user_set_password, name='setPassword'),
-    url(r'^$', views.homepage, name='homepage')
+
 
 ]

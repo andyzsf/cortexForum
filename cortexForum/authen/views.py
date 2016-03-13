@@ -80,6 +80,7 @@ def user_login(request):
         user=None
 
     context={'form':form,
+             'target':{1,2,3},
              }
     return render(request,'authen/user_login.html',context)
 
@@ -116,5 +117,3 @@ def user_set_password(request):
 
     return render(request,'authen/user_setpassword.html',context)
 
-def homepage(request):
-    return render(request,'forum/homepage.html',{})

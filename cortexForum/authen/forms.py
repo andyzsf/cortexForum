@@ -4,6 +4,8 @@ from .models import ForumUser
 from django import forms
 from django.conf import settings  # 比引用文件要好多了
 from django.contrib.auth import authenticate
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
 
 # 方便选择
 error_messages = {
@@ -94,6 +96,15 @@ class loginForm(forms.Form):
     def __init__(self, *args, **kwargs):
 
         super(loginForm, self).__init__(*args, **kwargs)
+        self.helper=FormHelper()
+        self.helper.form_class='form-horizontal'
+        self.helper.label_class='col-lg-2'
+        self.helper.field_class='col-lg-8'
+        self.helper.layout=Layout(
+            'username',
+            'password',
+
+        )
 
     def clean(self):
         username = self.cleaned_data.get('username')

@@ -8,7 +8,7 @@ from django.db import models
 # Create your models here.
 
 '''
-在这里记录 ForumUser 对应的特点
+ ForumUser 对应的 attribute:
 
 topic_author:发表的帖子对应的 author
 last_reply_author:最后回复的作者
@@ -61,25 +61,26 @@ class TopicManager(models.Manager):
     '''
 
     def get_all_topic(self):
-        query = self.get_queryset().select_related('node', 'author', 'last_replied_by').\
-                    all().order_by('-last_replied_time', '-reply_count', '-created_at')
+        query = self.get_queryset().select_related('node', 'author', 'last_replied_by'). \
+            all().order_by('-last_replied_time', '-reply_count', '-created_at')
 
         return query
 
     def get_hot_topic(self):
-        query = self.get_queryset().select_related('node', 'title', 'author', 'last_replied_by').\
-                    order_by('-reply_count')[:10]
+        query = self.get_queryset().select_related('node', 'author', 'last_replied_by'). \
+            order_by('-reply_count')
         return query
 
-    def get_all_topic_by_node_slug(self, node_slug=None):
+    def get_all_topic_by_node_slug(self, node_slug):
         query = self.get_queryset().filter(node__slug=node_slug). \
-            select_related('node', 'title', 'author', 'last_replied_by'). \
+            select_related('node', 'author', 'last_replied_by'). \
             order_by('-last_replied_time', '-reply_count', '-created_at')
         return query
 
     def get_all_topic_create_by_user(self, username=None):
-        query = self.get_queryset().filter(author__username=username). \
-            select_related('node', 'title').order_by('-created_at')  # 按照创建时间排序
+        # foreignkey+onetoonefield
+        query = self.get_queryset().filter(author__user__username = username). \
+                select_related('node', 'author').order_by('-created_at')  # 按照创建时间排序
         return query
 
 
@@ -119,19 +120,21 @@ class ReplyManager(models.Manager):
 
     def get_all_replies_by_topic(self, topic_id):
         # 我不太确定这里的 select_related 是否要选择作者
-        query = self.get_queryset().select_related('content', 'updated_at'). \
+        # select_related 看起来还不是任意的属性，比如说对该函数，就要用
+        # Non-relational field given in select_related: 'content'. Choices are: topic, author
+        query = self.get_queryset().select_related('topic', 'author'). \
             filter(topic__id=topic_id).order_by('updated_at')
         return query
 
     def get_hot_reply(self):
-        query = self.get_queryset().select_related('content', 'updated_at'). \
+        query = self.get_queryset().select_related('topic', 'author'). \
                     filter(upvote_count__gte=0)[:10]
         return query
 
-    def get_all_replies_by_user_id(self, user_id):
-        query = self.get_queryset().select_related('content', 'updated_at'). \
-            filter(author__id=user_id).order_by('-updated_at')
-
+    def get_all_replies_by_user_id(self, user_name):
+        query = self.get_queryset().select_related('topic', 'author'). \
+            filter(author__user__username=user_name).order_by('-updated_at')
+        return query
 
 class Reply(models.Model):
     '''
@@ -143,12 +146,16 @@ class Reply(models.Model):
     content = models.TextField()
     upvote_count = models.IntegerField(default=0)
     downvote_count = models.IntegerField(default=0)
+    agree_count = models.IntegerField(default=0)
     updated_at = models.DateTimeField(auto_now=True)
 
     topic = models.ForeignKey(Topic, related_name='reply')
     author = models.ForeignKey('authen.ForumUser', related_name='reply_author')
 
-    object = ReplyManager()
+    objects = ReplyManager()
+
+    def __unicode__(self):
+        return self.content
 
 
 class CollectManager(models.Manager):
@@ -196,7 +203,7 @@ class Notification(models.Model):
     '''
     status = models.IntegerField(default=0)  # 默认0为未读，1为已读
     content = models.TextField()
-    involved_type = models.IntegerField()  # 0表示为回复，1表示为@
+    involved_type = models.IntegerField(default=0)  # 0表示为回复，1表示为@
     involved_user = models.ForeignKey('authen.ForumUser', related_name='notify_user')
     involved_topic = models.ForeignKey(Topic, related_name='notify_topic')
     involved_reply = models.ForeignKey(Reply, related_name='notify_reply')

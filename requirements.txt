@@ -1,5 +1,9 @@
 Django==1.9.4
+django-crispy-forms==1.6.0
+django-debug-toolbar==1.4
+MySQL-python==1.2.5
 Pillow==3.1.1
 python-memcached==1.57
 six==1.10.0
+sqlparse==0.1.19
 wheel==0.24.0

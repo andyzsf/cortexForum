@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block files %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    {% if user.is_authenticated %}
+    {% for re in reply %}
+        var count_{{ re.id }} = parseInt($('#count_{{ re.id }}').text());
+        var upvote_count_{{ re.id }}=parseInt($('#plus_{{ re.id }}').text());
+    $('#plus_{{ re.id }}').click( function (e) {
+        count_{{ re.id }}++;
+        upvote_count_{{ re.id }}++;
+        $("#count_{{ re.id }}").text(count_{{ re.id }});
+        $.ajax({
+            type:"POST",
+            url:"/upvote/",
+            data:{
+                'upvote_count':upvote_count_{{ re.id }},
+                'reply_id':{{ re.id }}
+            },
+        });
+    });
+
+    $("#minus_{{ re.id }}").click( function (e) {
+        count_{{ re.id }}--;
+        $("#count_{{ re.id }}").text(count_{{ re.id }});
+    });
+    {% endfor %}
+    {% endif %}
+});
+</script>
+{% endblock %}
+{% block main_content %}
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+<div class="panel-body">
+    {{ topic.content }}
+</div>
+
+{% for re in reply %}
+     <li class="list-group-item">{{ re.content }}
+         <br>
+
+<button class="btn btn-default btn-sm pull-right" style="cursor:pointer"
+	id="plus_{{ re.id }}">{{ re.upvote_count }}↑</button>
+<p id="count_{{ re.id }}">{{ re.agree_count }}</p>
+          <button class="btn btn-default btn-sm " style="cursor:pointer"
+	id="minus_{{ re.id }}">{{ re.downvote_count }}↓</button>
+     </li>
+
+{% endfor %}
+
+    <form method="POST" class="form-horizontal" role="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-default" value="登陆">
+        提交评论
+</button>
+</form>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="panel panel-danger">
+  <div class="panel-heading">关于您的回复内容</div>
+
+<ul class="list-group">
+    <li class="list-group-item">请保证您的回复对内容有所帮助</li>
+    <li class="list-group-item">请保证您的回复不含人身攻击内容</li>
+    <li class="list-group-item">对于您不赞同的内容可以block </li>
+  </ul>
+
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block main_content %}
+
+    <div class="panel panel-default">
+  <div class="panel-heading"><strong>{{ username }} 的个人信息</strong></div>
+
+  <div class="panel-body">
+    <div class="alert alert-success" role="alert">加入于 {{ updated }}</div>
+      <div class="alert alert-success" role="alert">
+          <p>
+              个人简介:
+              <hr/>
+          {{ introduce }}
+          </p>
+      </div>
+
+      <div class="alert alert-danger" role="alert">
+          当前财富值: {{ fortune }}
+      </div>
+  </div>
+
+      <ul class="list-group">
+
+    <li class="list-group-item">
+        {% if github %}
+        <span class="label label-warning">
+        <a href="{{ github }}">github</a>
+        </span>
+
+            {% if github %}
+        <span class="label label-primary">
+        <a href="{{ website }}">个人网站 {{ website }}</a>
+        </span>
+
+        </li>
+          {% endif %}
+
+
+        </li>
+          {% endif %}
+
+
+  </ul>
+</div>
+
+    <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{{ username }} 发表的主题</div>
+
+
+  <!-- List group -->
+  <ul class="list-group">
+      {% for topic in user_topic %}
+    <li class="list-group-item">
+        <a href="{% url 'get_topic' topic.id %}">{{ topic.title }}</a></li>
+        {% endfor %}
+  </ul>
+</div>
+
+
+   <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{{ username }} 回复的内容</div>
+
+
+  <!-- List group -->
+  <ul class="list-group">
+
+       {% for reply in user_reply %}
+    <li class="list-group-item">
+        {{ reply.content }}
+    <div class="pull-right">
+        于{{ reply.updated_at }} 发表在
+        <a href="{% url 'get_topic' reply.topic.id %}">{{ reply.topic.title }}</a>
+    </div>
+           </li>
+
+        {% endfor %}
+  </ul>
+</div>
+{% endblock %}
