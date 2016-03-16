@@ -1,6 +1,6 @@
 ## cortexForum 的设计理念
 
-> The beat way to learn is to practice
+> The best way to learn is to practice
 
 在学习 Django 的过程中，自己最苦恼的一个问题就是没有一个好的实际项目来帮助人理解。[Django的文档](https://docs.djangoproject.com/en/1.9/)从排版到用例都是文档的最佳标准，但哪怕自己做了笔记，当天和一个月后进行巩固，在实际使用的时候还是进退失据。被推荐的如[Fairybbs](https://github.com/ericls/FairyBBS)在写的时候还没有 form 表单,还是用 `request.POST.get()`的方式来取得页面上的数据，而 [forum](https://github.com/zhu327/forum) 则是将 request 的 get 和 post 写法分开写在两个 views，增添了很多负担。并且所有的文件都在一个大的 app 里，不符合低耦合的特性。
 
@@ -48,13 +48,10 @@ upvote 和 downvote 机制
 
 1. 对 *nix 系统，请直接执行 `source venv/bin/activate` 以获得对应的 Python 环境
    对 Windows 系统，在 virtualenv 安装好虚拟环境之后用 `easy_install` 来安装 requirements.txt 中的依赖
-
 2. 在 `settings.py` 中设置好 mysql 的端口、用户名、密码(demo 中以 root:mysql 来作为例子),并执行
 ```
 create database cortexForum CHARACTER SET utf8 COLLATE utf8_bin;
 ```
 创建数据库并设置为 utf-8 编码格式以支持中文
-
 3. 导入数据库
-
 4. 执行`python manage.py runserver`运行
